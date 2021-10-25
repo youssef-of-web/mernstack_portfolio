@@ -1,6 +1,9 @@
 const Users = require("../models/users");
 var bcrypt = require("bcryptjs");
 const validateRegistration = require("../validator/registration");
+const validateLogin = require("../validator/login");
+const jwt = require("jsonwebtoken");
+
 const AddUser = async (req, res) => {
   const { isValid, errors } = validateRegistration(req.body);
   if (!isValid) {
@@ -29,6 +32,41 @@ const AddUser = async (req, res) => {
   }
 };
 
+const LoginUser = (req, res) => {
+  const { errors, isValid } = validateLogin(req.body);
+  if (!isValid) {
+    res.status(404).json(errors);
+  } else {
+    Users.findOne({ email: req.body.email }).then((user) => {
+      if (!user) {
+        res.status(404).json({ email: "user not exist" });
+      } else {
+        bcrypt.compare(req.body.password, user.password).then((isMatch) => {
+          if (!isMatch) {
+            res.status(404).json({ password: "incorrect password" });
+          } else {
+            const payload = {
+              id: user.id,
+              email: user.email,
+            };
+            jwt.sign(
+              payload,
+              process.env.SECRET,
+              { expiresIn: 60 },
+              (err, token) => {
+                res.json({
+                  success: true,
+                  token: token,
+                });
+              }
+            );
+          }
+        });
+      }
+    });
+  }
+};
 module.exports = {
   AddUser,
+  LoginUser,
 };

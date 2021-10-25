@@ -4,6 +4,7 @@ const Router = require("./router/index");
 require("dotenv").config();
 var bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const passport = require("passport");
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -15,6 +16,10 @@ app.use(bodyParser.json());
 mongoose.connect(process.env.MONGO_URL).then(() => {
   console.log("database connected");
 });
+
+/* init passport */
+app.use(passport.initialize());
+require("./config/Passport")(passport);
 
 /* Router */
 app.use("/api", Router);
