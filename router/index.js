@@ -9,9 +9,30 @@ Router.post("/registration", UserController.AddUser);
 Router.post("/login", UserController.LoginUser);
 
 /* profile router */
+Router.post(
+  "/profile",
+  passport.authenticate("jwt", { session: false }),
+  ProfileController.AddProfile
+);
+
 Router.get(
   "/profile",
   passport.authenticate("jwt", { session: false }),
-  ProfileController.Profile
+  ProfileController.GetProfile
 );
+
+Router.get(
+  "/profile/:username",
+  passport.authenticate("jwt", { session: false }),
+  ProfileController.GetUsername
+);
+
+Router.get("/all", ProfileController.GetAllProfile);
+
+Router.delete(
+  "/profile",
+  passport.authenticate("jwt", { session: false }),
+  ProfileController.DeleteProfile
+);
+
 module.exports = Router;
