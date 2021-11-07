@@ -35,4 +35,28 @@ Router.delete(
   ProfileController.DeleteProfile
 );
 
+Router.post(
+  "/experience",
+  passport.authenticate("jwt", { session: false }),
+  ProfileController.AddExperience
+);
+
+Router.post(
+  "/education",
+  passport.authenticate("jwt", { session: false }),
+  ProfileController.AddEducation
+);
+
+Router.delete(
+  "/experience/:id",
+  passport.authenticate("jwt", { session: false }),
+  ProfileController.DelExperience
+);
+
+Router.delete(
+  "/education/:id",
+  passport.authenticate("jwt", { session: false }),
+  ProfileController.DelEducation
+);
+
 module.exports = Router;
