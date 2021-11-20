@@ -1,21 +1,23 @@
 import React, { useState } from "react";
 import axios from "axios";
-function Register() {
+import { AuthRegister } from '../redux/actions/AuthAction'
+import { connect } from "react-redux";
+import InputGroup from "../common/InputGroup";
+
+
+function Register(props) {
   const [form, setForm] = useState({});
-  const [errors, setErrors] = useState({});
   const onChange_handle = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
   const onSubmit_handle = async (e) => {
     e.preventDefault();
     const data = form;
-    await axios
-      .post("/api/registration", data)
-      .then((res) => console.log("ok"))
-      .catch(async (err) => {
-        console.log(err.response.data);
-      });
+    props.AuthRegister(data, props.history)
   };
+
+  const { errors } = props;
 
   return (
     <div className="container p-4">
@@ -25,35 +27,36 @@ function Register() {
       >
         <p class="h4 mb-4">Sign up</p>
 
-        <input
+        <InputGroup
           type="text"
           name="name"
-          class="form-control mb-4"
           placeholder="Your name"
-          onChange={onChange_handle}
+          onchange={onChange_handle}
+          errors = {errors.name}
         />
+       
 
-        <input
+        <InputGroup
           type="email"
           name="email"
-          class="form-control mb-4"
           placeholder="E-mail"
-          onChange={onChange_handle}
+          onchange={onChange_handle}
+          errors = {errors.email}
         />
 
-        <input
+        <InputGroup
           type="password"
           name="password"
-          class="form-control mb-4"
           placeholder="Password"
-          onChange={onChange_handle}
+          onchange={onChange_handle}
+          errors = {errors.password}
         />
-        <input
+        <InputGroup
           type="password"
           name="confirm"
-          class="form-control mb-4"
           placeholder="Confirm your password"
-          onChange={onChange_handle}
+          onchange={onChange_handle}
+          errors = {errors.confirm}
         />
 
         <button class="btn btn-info my-4 btn-block" type="submit">
@@ -65,5 +68,8 @@ function Register() {
     </div>
   );
 }
-
-export default Register;
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  errors: state.errors
+})
+export default connect(mapStateToProps, {AuthRegister})(Register);

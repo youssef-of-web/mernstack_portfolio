@@ -1,21 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-function Login() {
+import { connect } from "react-redux";
+import { AuthLogin } from "../redux/actions/AuthAction";
+import InputGroup from "../common/InputGroup";
+
+
+
+function Login(props) {
   const [form, setForm] = useState({});
-  const [errors, setErrors] = useState({});
   const onChange_handle = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
   const onSubmit_handle = async (e) => {
     e.preventDefault();
     const data = form;
-    await axios
-      .post("/api/login", data)
-      .then((res) => console.log("ok"))
-      .catch(async (err) => {
-        console.log(err.response.data);
-      });
+    props.AuthLogin(data)
   };
+  
+  
+  
+  const {errors} = props;
   return (
     <div className="container p-4">
       <form
@@ -24,20 +28,20 @@ function Login() {
       >
         <p className="h4 mb-4">Sign in</p>
 
-        <input
+        <InputGroup
           type="email"
           name="email"
-          className="form-control mb-4"
           placeholder="E-mail"
-          onChange={onChange_handle}
+          onchange={onChange_handle}
+          errors = {errors.email}
         />
 
-        <input
+        <InputGroup
           type="password"
           name="password"
-          className="form-control mb-4"
           placeholder="Password"
-          onChange={onChange_handle}
+          onchange={onChange_handle}
+          errors = {errors.password}
         />
 
         <button className="btn btn-info btn-block my-4" type="submit">
@@ -47,5 +51,8 @@ function Login() {
     </div>
   );
 }
-
-export default Login;
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  errors: state.errors,
+});
+export default connect(mapStateToProps, { AuthLogin })(Login);
