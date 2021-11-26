@@ -1,5 +1,5 @@
 import Classnames from 'classnames';
-function InputGroup({type, name, placeholder,  onchange, errors}){
+function InputGroup({type, name, placeholder,  onchange, errors, value}){
     return (
     <>
         <input
@@ -8,6 +8,7 @@ function InputGroup({type, name, placeholder,  onchange, errors}){
           class={Classnames("form-control mb-4", {"is-invalid": errors})}
           placeholder={placeholder}
           onChange={onchange}
+          value={value}
         />
         {
          errors && (<div class="invalid-feedback">

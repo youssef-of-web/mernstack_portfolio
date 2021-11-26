@@ -1,6 +1,13 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-function Navbar() {
+import { logout } from '../../redux/actions/AuthAction'
+function Navbar(props) {
+  
+  const logout_handler = ()=>{
+    props.logout();
+  }
+
   return (
     <div>
       <nav class="mb-1 navbar navbar-expand-lg navbar-dark info-color">
@@ -26,19 +33,28 @@ function Navbar() {
               </Link>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <Link class="nav-link" to="/profile">
                 Profiles
-              </a>
+              </Link>
             </li>
           </ul>
           <ul class="navbar-nav ml-auto nav-flex-icons">
             <div>
-              <Link to="/login" className="btn btn-info btn-sm">
+              {
+                props.auth.authenticate === true ? 
+                <Link to="/logout" className="btn btn-info btn-sm" onClick={logout_handler}>
+                Logout
+              </Link>
+                :
+                <>
+                <Link to="/login" className="btn btn-info btn-sm">
                 Login
               </Link>
               <Link to="/register" className="btn btn-info btn-sm">
                 Register
               </Link>
+                </>
+              }
             </div>
           </ul>
         </div>
@@ -47,4 +63,8 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+const mapStateToProps = (state) => ({
+  auth: state.auth
+})
+
+export default connect(mapStateToProps, {logout})(Navbar);

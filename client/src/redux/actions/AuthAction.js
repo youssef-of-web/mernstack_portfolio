@@ -4,8 +4,6 @@ import { GET_ERRORS, SET_USER } from "../types";
 import jwt_decode from "jwt-decode";
 
 
-
-
 export const AuthRegister = (data) => async (dispatch) => {
   await axios
     .post("/api/registration", data)
@@ -47,6 +45,12 @@ export const AuthLogin = (data, history) => async (dispatch) => {
       });
     });
 };
+
+export const logout = ()=> (dispatch)=>{
+  localStorage.removeItem('jwtToken');
+  dispatch(setCurrentUser(null));
+  window.location.href = '/login'
+}
 
 export const setCurrentUser = (data) => ({
   type: SET_USER,
