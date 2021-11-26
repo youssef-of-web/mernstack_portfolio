@@ -4,6 +4,8 @@ import { GET_ERRORS, SET_USER } from "../types";
 import jwt_decode from "jwt-decode";
 
 
+
+
 export const AuthRegister = (data) => async (dispatch) => {
   await axios
     .post("/api/registration", data)
@@ -19,9 +21,12 @@ export const AuthRegister = (data) => async (dispatch) => {
 };
 
 export const AuthLogin = (data, history) => async (dispatch) => {
+
   await axios
     .post("/api/login", data)
     .then((res) => {
+      
+      history.push('/profile');
       
       const { token } = res.data;
 
@@ -33,7 +38,7 @@ export const AuthLogin = (data, history) => async (dispatch) => {
 
       dispatch(setCurrentUser(decode));
 
-      window.location.href = '/profile'
+      
     })
     .catch((err) => {
       dispatch({
