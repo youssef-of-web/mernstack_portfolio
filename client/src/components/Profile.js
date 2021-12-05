@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import InputGroup from "../common/InputGroup";
 import { AddProfile, GetProfile } from "../redux/actions/ProfileAction";
-
+import isEmpty from '../common/isEmpty'
 function Profile(props) {
-  const [dataProfile, setDataProfile] = useState({})
+
   const [form, setForm] = useState({});
   const onChange_handle = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -12,7 +12,7 @@ function Profile(props) {
   const onSubmit_handle = async (e) => {
     e.preventDefault();
     const data = form;
-    props.AddProfile(data)
+    props.AddProfile(data, props.history)
   };
 
 
@@ -20,14 +20,16 @@ function Profile(props) {
      const get_data =  ()=>{
       props.GetProfile();
      }
-      await get_data();
-      await setDataProfile(props.profile)
+     if(isEmpty(form)){
+         await get_data();
+         await setForm(props.profile)
+     }
      
-  },[])
+  })
    
 
   const { errors } = props;
-  return  props.profile.skills && dataProfile.skills ? <div>
+  return   form.skills || errors.profile ? <div>
      <div className="container p-4">
       <form
         className="text-center border border-light p-5"
@@ -41,7 +43,7 @@ function Profile(props) {
           placeholder="your username"
           onchange={onChange_handle}
           errors = {errors.username}
-          value={dataProfile.username}
+          value={form.username}
         />
 
         <InputGroup
@@ -50,7 +52,7 @@ function Profile(props) {
           placeholder="your country please"
           onchange={onChange_handle}
           errors = {errors.country}
-          value={dataProfile.country}
+          value={form.country}
         />
 
         <InputGroup
@@ -59,7 +61,7 @@ function Profile(props) {
           placeholder="your website please"
           onchange={onChange_handle}
           errors = {errors.country}
-          value={dataProfile.website}
+          value={form.website}
         />
 
         <InputGroup
@@ -68,7 +70,7 @@ function Profile(props) {
           placeholder="your skills please"
           onchange={onChange_handle}
           errors = {errors.skills}
-          value={dataProfile.skills.join(',')}
+          value={form.skills}
         />
 
          <InputGroup
@@ -77,7 +79,7 @@ function Profile(props) {
           placeholder="your bio please"
           onchange={onChange_handle}
           errors = {errors.bio}
-          value={dataProfile.bio}
+          value={form.bio}
         />
 
         <button className="btn btn-info btn-block my-4" type="submit">

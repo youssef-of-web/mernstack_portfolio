@@ -33,23 +33,40 @@ function Navbar(props) {
               </Link>
             </li>
             <li class="nav-item">
-              <Link class="nav-link" to="/profile">
-                Profiles
+              <Link class="nav-link" to="/dashboard">
+                Dashboard
               </Link>
             </li>
           </ul>
           <ul class="navbar-nav ml-auto nav-flex-icons">
             <div>
               {
-                props.auth.authenticate === true ? 
-                <Link to="/logout" className="btn btn-info btn-sm" onClick={logout_handler}>
-                Logout
-              </Link>
+                props.auth.authenticate === true ?
+                 <>
+                   <ul className="navbar-nav ml-auto nav-flex-icons">
+                     {
+                       props.profile.user ?
+                           <li className="nav-item avatar">
+                             <a className="nav-link p-0" href="#">
+                               <img src={props.profile.user.avatar}
+                                    alt="avatar image" height="40"/>
+                             </a>
+                           </li>
+                           :''
+
+                     }
+                     <Link to="/logout" className="btn btn-info btn-sm" onClick={logout_handler}>
+                       Logout
+                     </Link>
+                   </ul>
+
+                 </>
+
                 :
                 <>
                 <Link to="/login" className="btn btn-info btn-sm">
                 Login
-              </Link>
+               </Link>
               <Link to="/register" className="btn btn-info btn-sm">
                 Register
               </Link>
@@ -64,7 +81,8 @@ function Navbar(props) {
 }
 
 const mapStateToProps = (state) => ({
-  auth: state.auth
+  auth: state.auth,
+  profile: state.profile
 })
 
 export default connect(mapStateToProps, {logout})(Navbar);

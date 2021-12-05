@@ -11,6 +11,8 @@ import Navbar from "./components/utils/Navbar";
 import { setCurrentUser } from "./redux/actions/AuthAction";
 import store from "./redux/store";
 import jwt_decode from 'jwt-decode'
+import Experience from "./components/Experience";
+import Dashboard from "./components/Dashboard";
 
 
 if(localStorage.jwtToken){
@@ -39,7 +41,9 @@ export default function App() {
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register } />
+          <PrivateRoute exact path="/dashboard" component={Dashboard } />
           <PrivateRoute exact path="/profile" component={Profile } />
+          <PrivateRoute exact path="/profile/experience" component={Experience } />
         </Switch>
       </div>
     </Router>
