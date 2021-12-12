@@ -73,3 +73,40 @@ export const  DelExperience =  (id)=>async(dispatch)=>{
             })
     }
 }
+
+export const  AddEducation =  (data, history)=>async(dispatch)=>{
+    await axios.post('/api/education', data)
+        .then(res=>{
+            dispatch({
+                type: USER_PROFILE,
+                payload: res.data
+            })
+            history.push('/dashboard')
+        })
+        .catch(err=>{
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            })
+        })
+}
+
+export const  DelEducation =  (id)=>async(dispatch)=>{
+    if(window.confirm('do you want to delete this education')){
+        await axios.delete(`/api/education/${id}`)
+            .then(res=>{
+
+                dispatch({
+                    type: USER_PROFILE,
+                    payload: res.data
+                })
+
+            })
+            .catch(err=>{
+                dispatch({
+                    type: GET_ERRORS,
+                    payload: err.response.data
+                })
+            })
+    }
+}

@@ -1,5 +1,5 @@
 import {connect} from "react-redux";
-import {GetProfile, DelExperience} from "../redux/actions/ProfileAction";
+import {GetProfile, DelExperience, DelEducation} from "../redux/actions/ProfileAction";
 import {useEffect} from "react";
 import {Link} from "react-router-dom";
 function Dashboard(props) {
@@ -16,6 +16,9 @@ function Dashboard(props) {
 
     const deleteExperience = (id)=>{
         props.DelExperience(id)
+    }
+    const deleteEducation = (id)=>{
+        props.DelEducation(id)
     }
     return (
         <div className={"container mt-4"}>
@@ -88,8 +91,36 @@ function Dashboard(props) {
                                </div>
 
                                <div>
-                                   educations
-                               </div>
+                                        <span><h3>Educations</h3></span>
+                                        <Link class="nav-link" to="/profile/education">Add education</Link>
+                                        <div className={"educations"}>
+                                            <table className="table">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">School</th>
+                                                    <th scope="col">From</th>
+                                                    <th scope="col">To</th>
+                                                    <th scope="col">Description</th>
+                                                    <th scope="col">Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {
+                                                    profile.education.map(e=>(
+                                                        <tr>
+                                                            <td>{e.school}</td>
+                                                            <td>{e.from}</td>
+                                                            <td>{e.to}</td>
+                                                            <td>{e.description}</td>
+                                                            <td><button onClick={()=>deleteEducation(e._id)}>delete</button></td>
+                                                        </tr>
+                                                    ))
+                                                }
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                            </div>
                        ):
                        <Link className={"btn btn-primary"} to='/profile'>Create Profile</Link>
@@ -104,4 +135,4 @@ const mapStateToProps = (state)=>({
     profile : state.profile,
     errors: state.errors
 })
-export  default connect (mapStateToProps, {GetProfile, DelExperience})(Dashboard)
+export  default connect (mapStateToProps, {GetProfile, DelExperience, DelEducation})(Dashboard)

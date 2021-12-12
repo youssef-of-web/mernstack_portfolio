@@ -12,6 +12,7 @@ import { setCurrentUser } from "./redux/actions/AuthAction";
 import store from "./redux/store";
 import jwt_decode from 'jwt-decode'
 import Experience from "./components/Experience";
+import Education from "./components/Education";
 import Dashboard from "./components/Dashboard";
 
 
@@ -44,6 +45,8 @@ export default function App() {
           <PrivateRoute exact path="/dashboard" component={Dashboard } />
           <PrivateRoute exact path="/profile" component={Profile } />
           <PrivateRoute exact path="/profile/experience" component={Experience } />
+          <PrivateRoute exact path="/profile/education" component={Education } />
+
         </Switch>
       </div>
     </Router>
